@@ -384,6 +384,12 @@ public class LfractionTest {
       Lfraction r1 = f1.pow(-1);
    }
 
+   @Test (expected = RuntimeException.class)
+   public void testPowMinusException(){
+      Lfraction m1 = new Lfraction(0L, 7L);
+      Lfraction m2 = m1.pow(-3);
+   }
+
    @Test (timeout=1000)
    public void testPowMinus() {
       Lfraction f1 = new Lfraction(5L, 3L);
@@ -394,6 +400,8 @@ public class LfractionTest {
       Lfraction r2 = f2.pow(-4);
       assertEquals("Wrong power", new Lfraction(10000L, 81L), r2);
    }
+
+
 
 }
 
