@@ -344,5 +344,56 @@ public class LfractionTest {
       assertFalse ("hashCode does not depend on denominator", h1 == h3);
    }
 
+
+   @Test
+   public void testPowWith1(){
+      Lfraction f1 = new Lfraction(1L, 2L);
+      Lfraction f2 = f1.pow(1);
+      assertEquals("Invalid power", f1, f2);
+      assertNotSame("Fractions should not be identical", f1, f2);
+   }
+
+   @Test
+   public void testPowWithN(){
+      Lfraction f1 = new Lfraction(1L, 2L);
+      Lfraction f2 = f1.pow(4);
+      assertEquals("Invalid power", f2, new Lfraction(1L, 16L));
+
+      Lfraction m1 = new Lfraction(3L, 5L);
+      Lfraction m2 = m1.pow(3);
+      assertEquals("Invalid power", m2, new Lfraction(27L, 125));
+   }
+
+   @Test (timeout=1000)
+   public void testPowZero() {
+      Lfraction f1 = new Lfraction(2L, 4L);
+      Lfraction r1 = f1.pow(0);
+      assertEquals("Invalid power", new Lfraction(1L, 1L), r1);
+   }
+
+   @Test (timeout = 1000)
+   public void testPowMinusOne() {
+      Lfraction f1 = new Lfraction(3L, 5L);
+      Lfraction r1 = f1.pow(-1);
+      assertEquals("Invalid power", new Lfraction(5L, 3L), r1);
+   }
+
+   @Test (expected = RuntimeException.class)
+   public void testPowMinusOneException() {
+      Lfraction f1 = new Lfraction(0L, 7L);
+      Lfraction r1 = f1.pow(-1);
+   }
+
+   @Test (timeout=1000)
+   public void testPowMinus() {
+      Lfraction f1 = new Lfraction(5L, 3L);
+      Lfraction r1 = f1.pow(-2);
+      assertEquals("Wrong power", new Lfraction(9L, 25L), r1);
+
+      Lfraction f2 = new Lfraction(3L, 10L);
+      Lfraction r2 = f2.pow(-4);
+      assertEquals("Wrong power", new Lfraction(10000L, 81L), r2);
+   }
+
 }
 

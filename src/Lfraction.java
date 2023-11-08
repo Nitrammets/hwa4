@@ -78,8 +78,7 @@ public class Lfraction implements Comparable<Lfraction> {
 
       Lfraction otherFraction = (Lfraction) m;
 
-      return this.numerator == otherFraction.numerator
-              && this.denominator == otherFraction.denominator;
+      return this.compareTo(otherFraction) == 0;
    }
 
    /** Hashcode has to be the same for equal fractions and in general, different
@@ -137,9 +136,8 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this-m
     */
    public Lfraction minus (Lfraction m) {
-      long smallestCommonDivisor = denominator * m.getDenominator() / commonDivisor(denominator, m.getDenominator());
-      long newNumerator = (numerator * (smallestCommonDivisor / denominator)) - (m.getNumerator() * (smallestCommonDivisor / m.getDenominator()));
-      return new Lfraction(newNumerator, smallestCommonDivisor);
+      Lfraction tmp = m.opposite();
+      return this.plus(tmp);
    }
 
    /** Quotient of fractions.
@@ -150,10 +148,7 @@ public class Lfraction implements Comparable<Lfraction> {
       if (m.numerator == 0){
          throw new ArithmeticException("Division by zero in fraction.");
       }
-      Lfraction inversed = m.inverse();
-      long newNumerator = numerator * inversed.getNumerator();
-      long newDenominator = denominator * inversed.getDenominator();
-      return new Lfraction(newNumerator, newDenominator);
+      return this.times(m.inverse());
    }
 
    /** Comparision of fractions.
@@ -255,5 +250,27 @@ public class Lfraction implements Comparable<Lfraction> {
          b = temp;
       }
       return a;
+   }
+
+   /** Fraction raised to the power of an int.
+    * @param n int the fraction is to be raised to
+    * @return this raised to the power of n
+    */
+   public Lfraction pow(int n) {
+      Lfraction tmp = new Lfraction(this.numerator, this.denominator);
+      if (n == 0) {
+         return new Lfraction(1L, 1L);
+      } else if (n == 1) {
+         return tmp;
+      } else if (n > 1) {
+         return tmp.times(tmp.pow(n-1));
+      } else {
+         try {
+            return tmp.pow(Math.abs(n)).inverse();
+         } catch (RuntimeException e) {
+            throw new RuntimeException(String.format(
+                    "Cannot perform pow on \"%s\" with \"%s\"", this, n));
+         }
+      }
    }
 }
